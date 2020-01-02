@@ -23,7 +23,8 @@ class CreateEventsTable extends Migration
             $table->bigInteger('topic_id');
             $table->boolean('status')->nullable();
             $table->date('event_date');
-            $table->time('time_interval');
+            $table->time('start_at');
+            $table->time('end_at');
             $table->string('address');
             $table->timestamps();
             $table->index('topic_id');

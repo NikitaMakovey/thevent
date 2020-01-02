@@ -20,7 +20,7 @@ class CreateCharactersTable extends Migration
             $table->boolean('status')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
-            $table->primary(['role_id', 'user_id', 'event_id']);
+            $table->unique(['role_id', 'user_id', 'event_id']);
             $table->index('event_id');
             $table->index('role_id');
             $table->index('user_id');

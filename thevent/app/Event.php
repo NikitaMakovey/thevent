@@ -12,8 +12,18 @@ class Event extends Model
     protected $fillable = [
         'title', 'short_description', 'image',
         'full_description', 'user_id', 'status',
-        'event_date', 'time_interval', 'address',
-        'topic_id'
+        'event_date', 'start_at', 'end_at',
+        'address', 'topic_id'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'boolean',
+        'event_date' => 'date',
+        'start_at' => 'time',
+        'end_at' => 'time',
     ];
 
     /**

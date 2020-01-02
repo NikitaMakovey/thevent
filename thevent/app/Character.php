@@ -7,15 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 class Character extends Model
 {
     /**
-     * @var array
+     * @var null
      */
-    protected $primaryKey = ['role_id', 'user_id', 'event_id'];
+    protected $primaryKey = null;
+
+    /**
+     * @var bool
+     */
+    public $incrementing = false;
+
     /**
      * @var array
      */
     protected $fillable = [
         'role_id', 'user_id', 'event_id',
         'status', 'comment'
+    ];
+
+    /**
+     * @var array
+     */
+    protected $casts = [
+        'status' => 'boolean'
     ];
 
     /**
