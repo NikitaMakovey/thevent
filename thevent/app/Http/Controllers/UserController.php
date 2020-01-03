@@ -171,9 +171,18 @@ class UserController extends Controller
         return response($skills, 200);
     }
 
+    /**
+     * @param $id
+     * @return Response
+     */
     public function getUserTopics($id)
     {
+        $topics = DB::table('user_topic')
+            ->select(array('topic_id'))
+            ->where('user_id', '=', $id)
+            ->get();
 
+        return response($topics, 200);
     }
 
     /**
@@ -205,6 +214,7 @@ class UserController extends Controller
         $array_c = $request['skills'];
         $array_b = DB::table('user_skill')
             ->select(array('skill_id', 'skill_factor'))
+            ->where(array('user_id' => $id))
             ->orderBy('skill_id', 'asc')
             ->get()
             ->toArray();
@@ -264,8 +274,48 @@ class UserController extends Controller
         return response(["Successfully updated user's skills!"], 200);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
     public function storeUserTopics(Request $request, $id)
     {
+        $array_a = $request['topics'];
+        $array_b = DB::table('user_topic')
+            ->select(array('topic_id'))
+            ->where(array('user_id' => $id))
+            ->get();
 
+        $tmp_a = array_map('intval', $array_a);
+        $collection_a = collect($tmp_a);
+
+        $tmp_b = array();
+        foreach ($array_b as $item) {
+            array_push($tmp_b, $item->topic_id);
+        }
+        $collection_b = collect($tmp_b);
+
+        $insert_items = $collection_a->diff($collection_b);
+        $delete_items = $collection_b->diff($collection_a);
+
+        foreach ($delete_items as $item) {
+            DB::table('user_topic')
+                ->where(array(
+                    array('user_id', '=', $id),
+                    array('topic_id', '=', $item)
+                ))
+                ->delete();
+        }
+
+        foreach ($insert_items as $item) {
+            DB::table('user_topic')
+                ->insert(array('user_id' => $id, 'topic_id' => $item));
+        }
+
+        return response([
+            'insert data' => $insert_items->all(),
+            'delete data' => $delete_items->all()
+        ], 200);
     }
 }
