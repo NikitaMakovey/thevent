@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserRolesTable extends Migration
+class CreateUserRoleTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateUserRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_roles', function (Blueprint $table) {
+        Schema::create('user_role', function (Blueprint $table) {
             $table->bigInteger('user_id');
             $table->bigInteger('role_id');
-            $table->primary(['user_id', 'role_id']);
+            $table->unique(['user_id', 'role_id']);
             $table->index('user_id');
             $table
                 ->foreign('user_id')
@@ -38,13 +38,13 @@ class CreateUserRolesTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_roles', function (Blueprint $table) {
+        Schema::table('user_role', function (Blueprint $table) {
             $table->dropForeign('user_id');
             $table->dropForeign('role_id');
-            $table->dropIndex('user_roles_user_id_index');
+            $table->dropIndex('user_role_user_id_index');
             $table->dropColumn('user_id');
             $table->dropColumn('role_id');
         });
-        Schema::dropIfExists('user_roles');
+        Schema::dropIfExists('user_role');
     }
 }

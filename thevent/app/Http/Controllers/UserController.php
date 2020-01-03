@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use App\User;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Illuminate\Http\Request as Request;
+use Illuminate\Http\Response as Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -139,5 +141,131 @@ class UserController extends Controller
         $user = User::find($id);
         $user->delete();
         return response(['Successfully deleted!'], 200);
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     */
+    public function getUserRoles($id)
+    {
+        $roles = DB::table('user_role')
+            ->select(array('role_id'))
+            ->where('user_id', '=', $id)
+            ->get();
+
+        return response($roles, 200);
+    }
+
+    /**
+     * @param $id
+     * @return Response
+     */
+    public function getUserSkills($id)
+    {
+        $skills = DB::table('user_skill')
+            ->select(array('skill_id', 'skill_factor'))
+            ->where('user_id', '=', $id)
+            ->get();
+
+        return response($skills, 200);
+    }
+
+    public function getUserTopics($id)
+    {
+
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return Response
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function storeUserRole(Request $request, $id)
+    {
+        $this->validate($request, [
+            'role_id' => 'required'
+        ]);
+
+        $user_id = $id;
+        $role_id = $request['role_id'];
+        DB::table('user_role')->insert(array('user_id' => $user_id, 'role_id' => $role_id));
+
+        return response(["Successfully updated user's roles!"], 201);
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return Response
+     */
+    public function storeUserSkills(Request $request, $id)
+    {
+        $array_c = $request['skills'];
+        $array_b = DB::table('user_skill')
+            ->select(array('skill_id', 'skill_factor'))
+            ->orderBy('skill_id', 'asc')
+            ->get()
+            ->toArray();
+        //return response($array_c, 200);
+        usort($array_c, function($a, $b) { return $a["skill_id"] > $b["skill_id"]; });
+        //return response([$array_b[0]->skill_id], 200);
+        $pointer_c = 0;
+        $pointer_b = 0;
+        $limit_c = count($array_c);
+        $limit_b = count($array_b);
+        while (true) {
+            if ($pointer_c == $limit_c && $pointer_b == $limit_b) {
+                break;
+            }
+            if (count($array_b) == 0) {
+                $array_b = $array_c;
+                break;
+            }
+            if ($pointer_b == $limit_b) {
+                for ($i = $pointer_c; $i < $limit_c; $i++) {
+                    array_push($array_b, $array_c[$i]);
+                }
+                break;
+            }
+            if (
+                (int)$array_c[$pointer_c]["skill_id"] == $array_b[$pointer_b]->skill_id
+            ) {
+                $array_b[$pointer_b]->skill_factor =
+                    $array_b[$pointer_b]->skill_factor +
+                    (int)$array_c[$pointer_c]["skill_factor"];
+                $pointer_b++;
+                $pointer_c++;
+            } else if (
+                (int)$array_c[$pointer_c]["skill_id"] < $array_b[$pointer_b]->skill_id
+            ) {
+                array_push($array_b, $array_c[$pointer_c]);
+                $pointer_c++;
+            } else if (
+                (int)$array_c[$pointer_c]["skill_id"] > $array_b[$pointer_b]->skill_id
+            ) {
+                $pointer_b++;
+            }
+        }
+        for ($i = 0; $i < $limit_b; $i++) {
+            DB::table('user_skill')
+                ->where(array('user_id' => $id, 'skill_id' => $array_b[$i]->skill_id))
+                ->update(array('skill_factor' => $array_b[$i]->skill_factor));
+        }
+        for ($i = $limit_b; $i < count($array_b); $i++) {
+            DB::table('user_skill')
+                ->insert(array(
+                    'user_id' => $id,
+                    'skill_id' => $array_b[$i]["skill_id"],
+                    'skill_factor' => $array_b[$i]["skill_factor"]
+                ));
+        }
+        return response(["Successfully updated user's skills!"], 200);
+    }
+
+    public function storeUserTopics(Request $request, $id)
+    {
+
     }
 }

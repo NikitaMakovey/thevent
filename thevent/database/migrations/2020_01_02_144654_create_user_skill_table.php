@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserSkillsTable extends Migration
+class CreateUserSkillTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateUserSkillsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_skills', function (Blueprint $table) {
+        Schema::create('user_skill', function (Blueprint $table) {
             $table->bigInteger('user_id');
             $table->bigInteger('skill_id');
             $table->integer('skill_factor');
-            $table->primary(['user_id', 'skill_id']);
+            $table->unique(['user_id', 'skill_id']);
             $table->index('user_id');
             $table
                 ->foreign('user_id')
@@ -42,10 +42,10 @@ class CreateUserSkillsTable extends Migration
         Schema::table('user_skills', function (Blueprint $table) {
             $table->dropForeign('user_id');
             $table->dropForeign('skill_id');
-            $table->dropIndex('user_skills_user_id_index');
+            $table->dropIndex('user_skill_user_id_index');
             $table->dropColumn('user_id');
             $table->dropColumn('skill_id');
         });
-        Schema::dropIfExists('user_skills');
+        Schema::dropIfExists('user_skill');
     }
 }

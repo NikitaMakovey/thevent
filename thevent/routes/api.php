@@ -26,9 +26,17 @@ Route::group(['prefix' => 'v1'], function () {
         'events' => 'EventController'
     ]);
     Route::put('allow-status/{user}', 'UserController@updateAllowStatus');
+
     Route::get('characters', 'CharacterController@index');
     Route::post('characters', 'CharacterController@store');
     Route::post('character-show', 'CharacterController@show');
     Route::post('character-update', 'CharacterController@update');
     Route::post('character-destroy', 'CharacterController@destroy');
+
+    Route::get('users/{user}/roles', 'UserController@getUserRoles');
+    Route::put('users/{user}/roles', 'UserController@storeUserRole');
+    Route::get('users/{user}/topics', 'UserController@getUserTopics');
+    Route::put('users/{user}/topics', 'UserController@storeUserTopics');
+    Route::get('users/{user}/skills', 'UserController@getUserSkills');
+    Route::put('users/{user}/skills', 'UserController@storeUserSkills');
 });
