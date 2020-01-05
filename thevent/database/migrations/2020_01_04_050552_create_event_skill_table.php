@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserSkillTable extends Migration
+class CreateEventSkillTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreateUserSkillTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_skill', function (Blueprint $table) {
-            $table->bigInteger('user_id');
+        Schema::create('event_skill', function (Blueprint $table) {
+            $table->bigInteger('event_id');
             $table->bigInteger('skill_id');
             $table->integer('skill_factor');
-            $table->unique(['user_id', 'skill_id']);
-            $table->index('user_id');
+            $table->unique(['event_id', 'skill_id']);
+            $table->index('event_id');
             $table
-                ->foreign('user_id')
+                ->foreign('event_id')
                 ->references('id')
-                ->on('users')
+                ->on('events')
                 ->onDelete('cascade');
             $table
                 ->foreign('skill_id')
@@ -39,13 +39,13 @@ class CreateUserSkillTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_skill', function (Blueprint $table) {
-            $table->dropForeign('user_id');
+        Schema::table('event_skill', function (Blueprint $table) {
+            $table->dropForeign('event_id');
             $table->dropForeign('skill_id');
-            $table->dropIndex('user_skill_user_id_index');
-            $table->dropColumn('user_id');
+            $table->dropIndex('event_skill_user_id_index');
+            $table->dropColumn('event_id');
             $table->dropColumn('skill_id');
         });
-        Schema::dropIfExists('user_skill');
+        Schema::dropIfExists('event_skill');
     }
 }
