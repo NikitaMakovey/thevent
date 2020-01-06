@@ -23,6 +23,8 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
+Route::post('mail/send', 'SendMailController@send');
+
 //Route::middleware('auth:api')->get('/user', function (Request $request) { return $request->user(); });
 
 Route::group(['prefix' => 'v1'], function () {
