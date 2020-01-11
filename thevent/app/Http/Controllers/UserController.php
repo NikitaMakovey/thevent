@@ -68,7 +68,18 @@ class UserController extends Controller
     public function show($id)
     {
         $user = User::find($id);
-        return response($user, 200);
+        $events = DB::table('characters')
+            ->join('roles', 'characters.role_id', '=', 'roles.id')
+            ->join('events', 'characters.event_id', '=', 'events.id')
+            ->where(array('characters.user_id' => $id, 'characters.status' => true))
+            ->select('events.id', 'roles.name', 'events.title', 'events.image', 'events.event_date')
+            ->get();
+        $skills = DB::table('user_skill')
+            ->join('skills', 'user_skill.skill_id', '=', 'skills.id')
+            ->where(array('user_skill.user_id' => $id))
+            ->select('skills.name', 'user_skill.skill_factor')
+            ->get();
+        return response(['user' => $user, 'events' => $events, 'skills' => $skills], 200);
     }
 
     /**
