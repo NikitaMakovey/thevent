@@ -137,17 +137,18 @@ const routes = [
     {
         path: '/auth',
         component: AuthComponent,
-        meta: { middleware: [ guest ] },
         children: [
             {
                 path: 'login',
                 name: 'auth.login',
-                component: LoginComponent
+                component: LoginComponent,
+                meta: { middleware: [ guest ] }
             },
             {
                 path: 'register',
                 name: 'auth.register',
-                component: RegisterComponent
+                component: RegisterComponent,
+                meta: { middleware: [ guest ] }
             }
         ]
     },

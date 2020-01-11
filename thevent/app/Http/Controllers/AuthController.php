@@ -18,11 +18,26 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $this->validate($request, [
-            'first_name' => 'required|string|max:255',
-            'second_name' => 'required|string|max:255',
+            'first_name' => array(
+                'required',
+                'string',
+                'max:255',
+                'regex:/[А-Яа-я]+/is'
+            ),
+            'second_name' => array(
+                'required',
+                'string',
+                'max:255',
+                'regex:/[А-Яа-я]+/is'
+            ),
             'third_name' => 'nullable|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'phone_number' => 'required|string|unique:users',
+            'phone_number' => array(
+                'required',
+                'unique:users',
+                'regex:/\+[7][\b\d\b]{10}/is',
+                'max:12'
+            ),
             'password' => 'required|string|min:8',
             'password_confirmation' => 'required|string|min:8',
             'sex' => 'required|integer',
@@ -82,7 +97,8 @@ class AuthController extends Controller
                     'token_type' => 'Bearer',
                     'expires_at' => Carbon::parse(
                         $tokenResult->token->expires_at
-                    )->toDateTimeString()
+                    )->toDateTimeString(),
+                    'user' => $user
                 ], 200);
             } else {
                 return response(['Wrong password'], 401);

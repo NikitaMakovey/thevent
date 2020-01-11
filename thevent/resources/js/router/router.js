@@ -1,7 +1,7 @@
 import VueRouter from "vue-router";
 import routes from "./routes";
 import middlewarePipeline from "./middlewarePipeline";
-import { store } from "../store";
+import { store } from "../store/store";
 
 const router = new VueRouter({
     mode: 'history',
