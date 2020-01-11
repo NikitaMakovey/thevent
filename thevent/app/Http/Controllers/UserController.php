@@ -217,10 +217,10 @@ class UserController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
+     * @param  int  $id
      * @return Response
      */
-    public function storeUserSkills(Request $request, $id)
+    public function storeUserSkills(Request $request, int $id)
     {
         $array_c = $request['skills'];
         $array_b = DB::table('user_skill')
@@ -328,5 +328,34 @@ class UserController extends Controller
             'insert data' => $insert_items->all(),
             'delete data' => $delete_items->all()
         ], 200);
+    }
+
+    /**
+     * @param int $user_id
+     * @param int $event_id
+     * @return Response
+     */
+    public function checkEventStatus(int $user_id, int $event_id)
+    {
+        $description = DB::table('characters')
+            ->join('roles', 'characters.role_id', '=', 'roles.id')
+            ->where(array(
+                'characters.user_id' => $user_id,
+                'characters.event_id' => $event_id,
+                'roles.name' => 'Участник'
+            ))
+            ->select(
+                'characters.status'
+            )
+            ->first();
+        $status = 0;
+        if ($description == null) {
+            $status = 0;
+        } else if ($description->status == null) {
+            $status = 1;
+        } else if ($description->status == true) {
+            $status = 2;
+        }
+        return response(['status' => $status]);
     }
 }

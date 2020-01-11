@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -63,11 +64,71 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(int $id)
     {
-        $event = Event::find($id);
+        $event = DB::table('events')
+            ->join('users', 'events.user_id', '=', 'users.id')
+            ->join('topics', 'events.topic_id', '=', 'topics.id')
+            ->where(array('events.id' => $id))
+            ->select(
+                'events.*',
+                'users.first_name',
+                'users.second_name',
+                'users.third_name',
+                'users.email',
+                'users.phone_number',
+                'topics.name'
+            )
+            ->first();
+        $organizers = DB::table('characters')
+            ->join('roles', 'characters.role_id', '=', 'roles.id')
+            ->join('users', 'characters.user_id', '=', 'users.id')
+            ->where(
+                array(
+                    'roles.name' => 'Организатор',
+                    'characters.status' => true,
+                    'characters.event_id' => $id
+                )
+            )
+            ->select(
+                'users.first_name',
+                'users.second_name',
+                'users.third_name',
+                'users.image',
+                'users.id'
+            )
+            ->get();
+        $speakers = DB::table('characters')
+            ->join('roles', 'characters.role_id', '=', 'roles.id')
+            ->join('users', 'characters.user_id', '=', 'users.id')
+            ->where(
+                array(
+                    'roles.name' => 'Спикер',
+                    'characters.status' => true,
+                    'characters.event_id' => $id
+                )
+            )
+            ->select(
+                'users.first_name',
+                'users.second_name',
+                'users.third_name',
+                'users.image',
+                'users.id'
+            )
+            ->get();
+        $skills = DB::table('event_skill')
+            ->join('skills', 'event_skill.skill_id', '=', 'skills.id')
+            ->where(array('event_skill.event_id' => $id))
+            ->select('event_skill.skill_factor', 'skills.name')
+            ->get();
 
-        return response($event, 200);
+        return response(
+            [
+                'event' => $event,
+                'organizers' => $organizers,
+                'speakers' => $speakers,
+                'skills' => $skills
+            ], 200);
     }
 
     /**
@@ -103,5 +164,22 @@ class EventController extends Controller
         $event->delete();
 
         return response(['Successfully deleted!'], 200);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function storeEventSkills(Request $request, int $id) {
+        for ($i = 0; $i < count($request['skills']); $i++) {
+            DB::table('event_skill')
+                ->insert(array(
+                    'event_id' => $id,
+                    'skill_id' => $request['skills'][$i]["skill_id"],
+                    'skill_factor' => $request['skills'][$i]["skill_factor"]
+                ));
+        }
+        return response(["Successfully created event's skills!"], 201);
     }
 }

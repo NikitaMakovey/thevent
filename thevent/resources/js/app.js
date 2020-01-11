@@ -16,12 +16,12 @@ Vue.component(AlertError.name, AlertError);
 
 Vue.use(VueRouter);
 
-const moment = require('moment')
-require('moment/locale/ru')
+const moment = require('moment');
+require('moment/locale/ru');
 
 Vue.use(require('vue-moment'), {
     moment
-})
+});
 
 export const app = new Vue({
     el: '#app',

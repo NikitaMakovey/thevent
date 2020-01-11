@@ -94,6 +94,7 @@ class CharacterController extends Controller
         $user_id = $request['user_id'];
         $event_id = $request['event_id'];
 
+        //TODO: correct update!
         $character = Character::where('role_id', $role_id)
             ->where('user_id', $user_id)
             ->where('event_id', $event_id)

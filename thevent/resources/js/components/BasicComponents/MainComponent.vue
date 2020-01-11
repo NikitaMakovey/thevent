@@ -60,9 +60,9 @@
         <router-view></router-view>
     </main>
 
-    <footer class="text-muted">
+    <footer class="text-muted bg-dark">
       <div class="container">
-        <p>&copy; ThEvent</p>
+        <p class="title basic-footer">&copy; ThEvent</p>
       </div>
     </footer>
 </div>
@@ -84,5 +84,12 @@
 </script>
 
 <style scoped>
-
+    @media screen and (min-width: 2000px) {
+        main {
+            min-height: 1800px;
+        }
+    }
+    .basic-footer {
+        color: #b8cfe0;
+    }
 </style>

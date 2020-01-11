@@ -49,4 +49,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::put('users/{user}/topics', 'UserController@storeUserTopics');
     Route::get('users/{user}/skills', 'UserController@getUserSkills');
     Route::put('users/{user}/skills', 'UserController@storeUserSkills');
+
+    Route::post('events/{event}/skills', 'EventController@storeEventSkills');
+
+    Route::get('users/{user}/events/{event}', 'UserController@checkEventStatus');
 });
