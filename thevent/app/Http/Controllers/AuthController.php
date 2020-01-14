@@ -30,7 +30,12 @@ class AuthController extends Controller
                 'max:255',
                 'regex:/[А-Яа-я]+/is'
             ),
-            'third_name' => 'nullable|string|max:255',
+            'third_name' => array(
+                'nullable',
+                'string',
+                'max:255',
+                'regex:/[А-Яа-я]+/is'
+            ),
             'email' => 'required|string|email|max:255|unique:users',
             'phone_number' => array(
                 'required',
@@ -87,7 +92,7 @@ class AuthController extends Controller
                 $token = $tokenResult->token;
 
                 if ($request['remember_me']) {
-                    $token->expires_at = Carbon::now()->addWeeks(1);
+                    $token->expires_at = Carbon::now()->addMinutes(30);
                 }
 
                 $token->save();
@@ -98,6 +103,7 @@ class AuthController extends Controller
                     'expires_at' => Carbon::parse(
                         $tokenResult->token->expires_at
                     )->toDateTimeString(),
+                    'now_datetime' => date('Y-m-d h:i:s'),
                     'user' => $user
                 ], 200);
             } else {

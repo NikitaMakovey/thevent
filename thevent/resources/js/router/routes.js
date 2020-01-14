@@ -21,6 +21,7 @@ import PhotoComponent from "../components/ProfileComponents/EditComponents/Field
 import SpecializationComponent
     from "../components/ProfileComponents/EditComponents/FieldComponents/SpecializationComponent";
 import TopicComponent from "../components/ProfileComponents/EditComponents/FieldComponents/TopicComponent";
+import VerifyEmail from "../components/ProfileComponents/EditComponents/FieldComponents/VerifyEmail";
 
 import DashboardComponent from "../components/DashboardComponents/MainComponent";
 
@@ -38,6 +39,7 @@ import RegisterComponent from "../components/AuthComponents/RegisterComponent";
 
 import auth from "./middleware/auth";
 import guest from "./middleware/guest";
+import profile from "./middleware/profile";
 
 const routes = [
     {
@@ -62,7 +64,8 @@ const routes = [
             {
                 path: 'users/:id',
                 name: 'user',
-                component: SingleUserComponent
+                component: SingleUserComponent,
+                meta: { middleware: [ profile ] }
             },
             {
                 path: 'request',
@@ -128,6 +131,11 @@ const routes = [
                         path: 'topics',
                         name: 'edit.topics',
                         component: TopicComponent,
+                    },
+                    {
+                        path: 'verify',
+                        name: 'edit.verify',
+                        component: VerifyEmail,
                     }
                 ]
             }

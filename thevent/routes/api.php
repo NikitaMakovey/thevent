@@ -20,6 +20,17 @@ Route::group(['prefix' => 'auth'], function () {
     Route::group(['middleware' => 'auth:api'], function() {
         Route::get('logout', 'AuthController@logout');
         Route::get('user', 'AuthController@user');
+
+        Route::put('user/photo', 'EditController@updatePhoto');
+        Route::put('user/info', 'EditController@updateMainInfo');
+        Route::put('user/contacts', 'EditController@updateContacts');
+        Route::put('user/bio', 'EditController@updateBio');
+        Route::put('user/verify', 'EditController@verifyEmail');
+        Route::put('user/email', 'EditController@updateEmail');
+        Route::put('user/topics', 'EditController@updateTopics');
+        Route::get('user/topics', 'EditController@getTopics');
+        Route::put('user/allow', 'EditController@updateAllow');
+        Route::put('user/password', 'EditController@resetPassword');
     });
 });
 

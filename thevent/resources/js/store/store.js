@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 import auth from './modules/auth';
 import event from './modules/event';
 import user from './modules/user';
+import verify from "./modules/verify";
+import topic from "./modules/topic";
 
 Vue.use(Vuex);
 
@@ -14,6 +16,8 @@ export const store = new Vuex.Store({
     modules: {
         auth,
         event,
-        user
+        user,
+        verify,
+        topic
     }
 });

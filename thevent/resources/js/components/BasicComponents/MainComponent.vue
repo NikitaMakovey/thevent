@@ -29,7 +29,12 @@
                             </li>
                             <template v-if="ACCESS_TOKEN">
                                 <li>
-                                    <span class="title text-white" @click="logout">Выйти</span>
+                                    <router-link to="/user" class="text-white">
+                                        <span class="title">Профиль</span>
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <button class="title text-white link btn" @click="logout">Выйти</button>
                                 </li>
                             </template>
                             <template v-else>
@@ -84,6 +89,9 @@
 </script>
 
 <style scoped>
+    main {
+        min-height: 1400px;
+    }
     @media screen and (min-width: 2000px) {
         main {
             min-height: 1800px;

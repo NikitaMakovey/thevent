@@ -60,10 +60,6 @@
                                 <td>{{ USER_INFO.email === null ? "-" : USER_INFO.email }}</td>
                             </tr>
                             <tr>
-                                <td>Специализация</td>
-                                <td>{{ USER_INFO.specialization === null ? "-" : USER_INFO.specialization }}</td>
-                            </tr>
-                            <tr>
                                 <td>Дата рождения</td>
                                 <td>
                                     {{
@@ -71,6 +67,10 @@
                                         "-" : $moment(USER_INFO.birth_date).format('LL')
                                     }}
                                 </td>
+                            </tr>
+                            <tr>
+                                <td>Специализация</td>
+                                <td>{{ USER_INFO.specialization === null ? "-" : USER_INFO.specialization }}</td>
                             </tr>
                             <tr>
                                 <td>Био</td>
