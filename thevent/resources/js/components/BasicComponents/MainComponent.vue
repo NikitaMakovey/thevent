@@ -34,7 +34,14 @@
                                     </router-link>
                                 </li>
                                 <li>
-                                    <button class="title text-white link btn" @click="logout">Выйти</button>
+                                    <router-link to="/request" class="text-white">
+                                        <span class="title">Организовать мероприятие</span>
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <v-btn dark class="text-white pa-0 ma-0" @click="logout">
+                                        <span class="title">Выйти</span>
+                                    </v-btn>
                                 </li>
                             </template>
                             <template v-else>

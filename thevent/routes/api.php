@@ -27,10 +27,18 @@ Route::group(['prefix' => 'auth'], function () {
         Route::put('user/bio', 'EditController@updateBio');
         Route::put('user/verify', 'EditController@verifyEmail');
         Route::put('user/email', 'EditController@updateEmail');
+
         Route::put('user/topics', 'EditController@updateTopics');
         Route::get('user/topics', 'EditController@getTopics');
+
         Route::put('user/allow', 'EditController@updateAllow');
         Route::put('user/password', 'EditController@resetPassword');
+
+        Route::group(['prefix' => 'request'], function () {
+            Route::post('event', 'RequestController@storeEvent');
+            Route::post('skills', 'RequestController@storeEventSkills');
+            Route::post('comment', 'RequestController@storeComment');
+        });
     });
 });
 
