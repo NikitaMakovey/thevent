@@ -5,7 +5,12 @@
             style="max-height: 94vh"
             class="overflow-y-auto"
         >
-            <div class="row" style="height: 94vh">
+            <v-col cols="12">
+                <v-row>
+                    <p class="display-1">Заявки</p>
+                </v-row>
+            </v-col>
+            <div class="row" style="height: 90vh">
                 <div class="col-md-4" v-for="(request, i) in EM_REQUEST" :key="i">
                     <div class="card mb-4 box-shadow">
                         <img class="card-img-top" :src="request.image" alt="Card image cap">

@@ -384,6 +384,77 @@ class DashboardController extends Controller
     }
 
     /**
+     * @param int $user_id
+     * @param int $event_id
+     */
+    public function postUserSkills(int $user_id, int $event_id)
+    {
+        $array_a = DB::table('event_skill')
+            ->select(array('skill_id', 'skill_factor'))
+            ->where(array('event_id' => $event_id))
+            ->orderBy('skill_id', 'asc')
+            ->get()
+            ->toArray();
+        $array_b = DB::table('user_skill')
+            ->select(array('skill_id', 'skill_factor'))
+            ->where(array('user_id' => $user_id))
+            ->orderBy('skill_id', 'asc')
+            ->get()
+            ->toArray();
+
+        $pointer_a = 0;
+        $pointer_b = 0;
+        $limit_a = count($array_a);
+        $limit_b = count($array_b);
+        while (true) {
+            if ($pointer_a == $limit_a && $pointer_b == $limit_b) {
+                break;
+            }
+            if (count($array_b) == 0) {
+                $array_b = $array_a;
+                break;
+            }
+            if ($pointer_b == $limit_b) {
+                for ($i = $pointer_a; $i < $limit_a; $i++) {
+                    array_push($array_b, $array_a[$i]);
+                }
+                break;
+            }
+            if (
+                $array_a[$pointer_a]->skill_id == $array_b[$pointer_b]->skill_id
+            ) {
+                $array_b[$pointer_b]->skill_factor =
+                    $array_b[$pointer_b]->skill_factor +
+                    $array_a[$pointer_a]->skill_factor;
+                $pointer_b++;
+                $pointer_a++;
+            } else if (
+                $array_a[$pointer_a]->skill_id < $array_b[$pointer_b]->skill_id
+            ) {
+                array_push($array_b, $array_a[$pointer_a]);
+                $pointer_a++;
+            } else if (
+                $array_a[$pointer_a]->skill_id > $array_b[$pointer_b]->skill_id
+            ) {
+                $pointer_b++;
+            }
+        }
+        for ($i = 0; $i < $limit_b; $i++) {
+            DB::table('user_skill')
+                ->where(array('user_id' => $user_id, 'skill_id' => $array_b[$i]->skill_id))
+                ->update(array('skill_factor' => $array_b[$i]->skill_factor));
+        }
+        for ($i = $limit_b; $i < count($array_b); $i++) {
+            DB::table('user_skill')
+                ->insert(array(
+                    'user_id' => $user_id,
+                    'skill_id' => $array_b[$i]->skill_id,
+                    'skill_factor' => $array_b[$i]->skill_factor
+                ));
+        }
+    }
+
+    /**
      * @param Request $request
      * @param int $id
      * @return Response
@@ -411,6 +482,8 @@ class DashboardController extends Controller
             )
             ->update(['status' => true]);
 
+        $this->postUserSkills($request['user_id'], $id);
+
         return response(['message' => 'Запрос одобрен!'], 200);
     }
 
@@ -429,6 +502,21 @@ class DashboardController extends Controller
         $user = $request->user();
         if ($user == null) {
             return response(['message' => -1], 401);
+        }
+
+        $requests = DB::table('characters')
+            ->where(
+                array(
+                    'role_id' => $request['role_id'],
+                    'event_id' => $id
+                )
+            )
+            ->whereRaw('status IS NULL')
+            ->select('user_id')
+            ->get();
+
+        foreach ($requests as $request) {
+            $this->postUserSkills($request->user_id, $id);
         }
 
         DB::table('characters')
@@ -607,11 +695,15 @@ class DashboardController extends Controller
 
     /**
      * @param Request $request
-     * @param int $id
      * @return Response
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function deleteMainModerator(int $id, Request $request)
+    public function deleteMainModerator(Request $request)
     {
+        $this->validate($request, [
+            'user_id' => 'required|integer'
+        ]);
+
         $admin = $request->user();
         if ($admin == null) {
             return response(['message' => -1], 401);
@@ -625,17 +717,17 @@ class DashboardController extends Controller
         $user_role = DB::table('user_role')
             ->where(
                 array(
-                    'user_id' => $id,
+                    'user_id' => $request['user_id'],
                     'role_id' => $role->id
                 )
             )
             ->get();
 
-        if (count($user_role) == 0) {
+        if (count($user_role)) {
             DB::table('user_role')
                 ->where(
                     array(
-                        'user_id' => $id,
+                        'user_id' => $request['user_id'],
                         'role_id' => $role->id
                     )
                 )

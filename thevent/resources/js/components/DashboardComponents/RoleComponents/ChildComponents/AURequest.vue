@@ -22,7 +22,7 @@
                                     <v-btn
                                         class="ma-2" tile
                                         color="indigo" dark
-                                        @click="deleteRequest(request.id)"
+                                        @click="deleteMainModerator(request.id)"
                                     >
                                         Сократить
                                     </v-btn>
@@ -61,15 +61,18 @@
             ...mapGetters(['A_REQUESTS'])
         },
         methods: {
-            deleteRequest: function (id) {
+            deleteMainModerator: function (id) {
                 let token = this.$store.getters.TOKEN_TYPE + ' ' + this.$store.getters.ACCESS_TOKEN;
                 let config = {
                     headers: {
                         Authorization: token
                     }
                 };
-                let path = '/api/auth/dashboard/admin/main-moderators/' + id;
-                axios.delete(path, config)
+                let path = '/api/auth/dashboard/admin/main-moderators/delete';
+                let data = {
+                    user_id: id
+                };
+                axios.post(path, data, config)
                     .then(() => {
                         this.$store.dispatch('GET_A_REQUESTS', config);
                     })

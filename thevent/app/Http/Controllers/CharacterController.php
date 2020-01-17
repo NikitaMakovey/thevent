@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Character;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as Response;
+use Illuminate\Support\Facades\DB;
 
 class CharacterController extends Controller
 {
@@ -128,5 +130,51 @@ class CharacterController extends Controller
             ->delete();
 
         return response(['Successfully deleted!'], 200);
+    }
+
+    /**
+     * @param int $id
+     * @param Request $request
+     * @return Response
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function participate(int $id, Request $request)
+    {
+        $user = $request->user();
+        if ($user == null) {
+            return response(['message' => -1], 422);
+        }
+
+        $role = DB::table('roles')
+            ->where('name', '=', 'Участник')
+            ->select('id')
+            ->first();
+
+        if ((int)$request['role_id'] == $role->id) {
+            DB::table('characters')
+                ->insert(
+                    array(
+                        'user_id' => $user->id,
+                        'role_id' => $role->id,
+                        'event_id' => $id
+                    )
+                );
+        } else {
+            $this->validate($request, [
+                'comment' => 'required',
+                'role_id' => 'required|integer',
+            ]);
+            DB::table('characters')
+                ->insert(
+                    array(
+                        'user_id' => $user->id,
+                        'role_id' => $request['role_id'],
+                        'event_id' => $id,
+                        'comment' => $request['comment']
+                    )
+                );
+        }
+
+        return response(['message' => 'Участник зарегистрировался успешно!'], 200);
     }
 }

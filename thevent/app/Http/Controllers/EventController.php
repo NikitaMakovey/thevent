@@ -16,10 +16,32 @@ class EventController extends Controller
     public function index()
     {
         $events = DB::table('events')
-            ->where('status', '=', true)
-            ->where('event_date', '>', date('Y-m-d'))
-            ->orderBy('updated_at')
-            ->get();
+            ->join('topics', 'events.topic_id', '=', 'topics.id')
+            ->where('events.status', '=', true)
+            ->where('events.event_date', '>', date('Y-m-d'))
+            ->orderBy('events.event_date')
+            ->select('events.*', 'topics.name')
+            ->paginate(3);
+
+        return response($events, 200);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getTopicEvents(int $id)
+    {
+        $events = DB::table('events')
+            ->join('topics', 'events.topic_id', '=', 'topics.id')
+            ->where('events.status', '=', true)
+            ->where('events.topic_id', '=', $id)
+            ->where('events.event_date', '>', date('Y-m-d'))
+            ->orderBy('events.event_date')
+            ->select('events.*', 'topics.name')
+            ->paginate(3);
 
         return response($events, 200);
     }

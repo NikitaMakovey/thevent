@@ -3,25 +3,27 @@
         <v-spacer></v-spacer>
         <v-col cols="10" lg="8" class="pa-0 ma-0">
             <v-card>
-                <v-col
-                    cols="12"
-                >
+                <v-col cols="12">
                     <p class="event-title">{{ EVENT.title }}</p>
                 </v-col>
             </v-card>
-            <v-card
-                class="my-2 px-2"
-            >
-                <v-row
-                    align="center"
-                >
+            <v-card class="my-2 px-2">
+                <v-row align="center">
                     <v-col
                         class="text-left container-xs px-lg-4"
                         cols="12"
                         sm="8"
                     >
                         <div class="my-2">
-                            <v-btn tile outlined color="#05af9a" class="event-button">Готовы стать больше, чем участник?</v-btn>
+                            <v-btn
+                                tile outlined
+                                color="#05af9a"
+                                class="event-button"
+                                data-toggle="modal"
+                                data-target="#eventModal"
+                            >
+                                Готовы стать больше, чем участник?
+                            </v-btn>
                         </div>
                     </v-col>
                     <v-spacer></v-spacer>
@@ -148,13 +150,113 @@
             </v-card>
         </v-col>
         <v-spacer></v-spacer>
+
+        <div
+                class="modal fade" id="eventModal"
+                tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Хочешь стать больше, чем участник?</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <fieldset class="form-group">
+                                <div class="row">
+                                    <legend class="col-form-label col-sm-5">Кем хотите стать?</legend>
+                                    <div class="col-sm-7">
+                                        <div class="form-check">
+                                            <input
+                                                v-model="form.role_id"
+                                                class="form-check-input"
+                                                type="radio" name="role_id"
+                                                id="gridRadios1" value="3"
+                                            >
+                                            <label class="form-check-label" for="gridRadios1">
+                                                Модератор мероприятия
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                v-model="form.role_id"
+                                                class="form-check-input"
+                                                type="radio" name="role_id"
+                                                id="gridRadios2" value="4"
+                                            >
+                                            <label class="form-check-label" for="gridRadios2">
+                                                Соорганизатор
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                v-model="form.role_id"
+                                                class="form-check-input"
+                                                type="radio" name="role_id"
+                                                id="gridRadios3" value="5"
+                                            >
+                                            <label class="form-check-label" for="gridRadios3">
+                                                Спикер
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input
+                                                v-model="form.role_id"
+                                                class="form-check-input"
+                                                type="radio" name="role_id"
+                                                id="gridRadios4" value="6"
+                                            >
+                                            <label class="form-check-label" for="gridRadios4">
+                                                Волонтёр
+                                            </label>
+                                        </div>
+                                        <has-error :form="form" field="role_id"></has-error>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="inputComment">Комментарий</label>
+                                    <textarea
+                                        v-model="form.comment" name="comment"
+                                        type="text" class="form-control bio-field"
+                                        id="inputComment" placeholder="Опишите заявку"
+                                        :class="{ 'is-invalid': form.errors.has('comment') }"
+                                        style="min-height: 10rem"
+                                    >
+                                    </textarea>
+                                    <has-error :form="form" field="comment"></has-error>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark" data-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-outline-dark" @click="postRequestUp">Отправить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
     </v-row>
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
+    import axios from 'axios';
 
     export default {
+        data() {
+            return {
+                form: new Form({
+                    role_id: null,
+                    comment: ''
+                })
+            }
+        },
         mounted() {
             this.$store.dispatch('GET_EVENT', { id: this.$route.params.id });
             if (this.$store.getters.ACCESS_TOKEN) {
@@ -176,15 +278,36 @@
         methods: {
             postRequest: function () {
                 if (this.$store.getters.ACCESS_TOKEN) {
-                    this.$store.dispatch('SEND_REQUEST', {
-                        user_id: this.$store.getters.ID,
-                        event_id: this.$route.params.id
-                    }).then(() => {
-                        this.$store.getters.EVENT_STATUS = 1;
-                    })
+                    let token = this.$store.getters.TOKEN_TYPE + ' ' + this.$store.getters.ACCESS_TOKEN;
+                    let config = {
+                        headers: {
+                            Authorization: token
+                        }
+                    };
+                    let data = {
+                        role_id: 7
+                    };
+                    let path = '/api/auth/events/' + this.$route.params.id + '/participate';
+                    axios.post(path, data, config)
+                        .then(() => {
+                            this.$store.dispatch('CHANGE_STATUS', 1);
+                        })
                 } else {
                     this.$router.push({ name: 'auth.login' });
                 }
+            },
+            postRequestUp: function () {
+                let token = this.$store.getters.TOKEN_TYPE + ' ' + this.$store.getters.ACCESS_TOKEN;
+                let config = {
+                    headers: {
+                        Authorization: token
+                    }
+                };
+                let path = '/api/auth/events/' + this.$route.params.id + '/participate';
+                this.form.post(path, config)
+                    .then(() => {
+                        $('#eventModal').modal('hide');
+                    })
             }
         }
     }

@@ -81,7 +81,7 @@
 
     <footer class="text-muted bg-dark">
       <div class="container">
-        <p class="title basic-footer">&copy; ThEvent</p>
+        <p class="title basic-footer">{{ new Date().getFullYear() }} &copy; ThEvent</p>
       </div>
     </footer>
 </div>

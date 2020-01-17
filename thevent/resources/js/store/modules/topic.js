@@ -14,7 +14,7 @@ export default {
             state.USER_TOPICS = data;
         },
         REFRESH_TOPICS: (state, data) => {
-            state.USER_TOPICS = data;
+            state.TOPICS = data;
         },
     },
     actions: {

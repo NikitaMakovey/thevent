@@ -44,6 +44,18 @@ export default {
                     })
             });
         },
+        GET_TOPIC_EVENTS(context, payload) {
+            return new Promise((resolve, reject) => {
+                axios.get('/api/v1/topics/' + payload + '/events')
+                    .then(({data}) => {
+                        context.commit('REFRESH_EVENTS', data);
+                        resolve(data);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    })
+            });
+        },
         GET_EVENT(context, payload) {
             return new Promise((resolve, reject) => {
                 axios.get('/api/v1/events/' + payload.id)
@@ -68,11 +80,10 @@ export default {
                     })
             });
         },
-        SEND_REQUEST(context, payload) {
-            return new Promise((resolve, reject) => {
-                axios.post('/api/v1/characters', {
-
-                })
+        CHANGE_STATUS(context, payload) {
+            return new Promise(resolve => {
+                context.commit('REFRESH_STATUS', { status: payload });
+                resolve(payload);
             });
         }
     }

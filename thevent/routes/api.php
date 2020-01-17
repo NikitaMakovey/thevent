@@ -34,6 +34,8 @@ Route::group(['prefix' => 'auth'], function () {
         Route::put('user/allow', 'EditController@updateAllow');
         Route::put('user/password', 'EditController@resetPassword');
 
+        Route::post('events/{event}/participate', 'CharacterController@participate');
+
         Route::group(['prefix' => 'request'], function () {
             Route::post('event', 'RequestController@storeEvent');
             Route::post('skills', 'RequestController@storeEventSkills');
@@ -64,7 +66,7 @@ Route::group(['prefix' => 'auth'], function () {
             Route::get('speaker/events', 'DashboardController@getSpeakerRequests');
 
             Route::get('admin/main-moderators', 'DashboardController@getAdminRequests');
-            Route::delete('admin/main-moderators/{main-moderator}', 'DashboardController@deleteMainModerator');
+            Route::post('admin/main-moderators/delete', 'DashboardController@deleteMainModerator');
             Route::post('admin/main-moderators', 'DashboardController@setMainModerator');
         });
     });
@@ -98,6 +100,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::put('users/{user}/skills', 'UserController@storeUserSkills');
 
     Route::post('events/{event}/skills', 'EventController@storeEventSkills');
+
+    Route::get('topics/{topic}/events', 'EventController@getTopicEvents');
 
     Route::get('users/{user}/events/{event}', 'UserController@checkEventStatus');
 });
