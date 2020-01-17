@@ -358,4 +358,57 @@ class UserController extends Controller
         }
         return response(['status' => $status]);
     }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function recommends(Request $request)
+    {
+        $user = $request->user();
+        if ($user == null) {
+            return response(['message' => -1], 422);
+        }
+
+        $events = DB::table('events')
+            ->join('user_topic', function ($join) use ($user) {
+                $join->on('events.topic_id', '=', 'user_topic.topic_id')
+                    ->where('user_topic.user_id', '=', $user->id);
+            })
+            ->join('topics', 'events.topic_id', '=', 'topics.id')
+            ->where('events.status', '=', true)
+            ->where('events.event_date', '>=', date('Y-m-d'))
+            ->orderBy('events.event_date')
+            ->select('events.*', 'topics.name')
+            ->paginate(6);
+
+        return response($events, 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function calendarEvents(Request $request)
+    {
+        $user = $request->user();
+        if ($user == null) {
+            return response(['message' => -1], 422);
+        }
+
+        $events = DB::table('events')
+            ->join('characters', function ($join) use ($user) {
+                $join->on('characters.event_id', '=', 'events.id')
+                    ->where('characters.user_id', '=', $user->id)
+                    ->where('characters.role_id', '=', 7);
+            })
+            ->join('topics', 'events.topic_id', '=', 'topics.id')
+            ->where('events.status', '=', true)
+            ->where('events.event_date', '>=', date('Y-m-d'))
+            ->orderBy('events.event_date')
+            ->select('events.*', 'topics.name')
+            ->paginate(6);
+
+        return response($events, 200);
+    }
 }

@@ -36,6 +36,9 @@ Route::group(['prefix' => 'auth'], function () {
 
         Route::post('events/{event}/participate', 'CharacterController@participate');
 
+        Route::get('recommend', 'UserController@recommends');
+        Route::get('calendar', 'UserController@calendarEvents');
+
         Route::group(['prefix' => 'request'], function () {
             Route::post('event', 'RequestController@storeEvent');
             Route::post('skills', 'RequestController@storeEventSkills');

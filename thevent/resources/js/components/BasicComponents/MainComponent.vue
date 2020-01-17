@@ -34,6 +34,16 @@
                                     </router-link>
                                 </li>
                                 <li>
+                                    <router-link to="/recommendations" class="text-white">
+                                        <span class="title">Рекомендации</span>
+                                    </router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/calendar" class="text-white">
+                                        <span class="title">Календарь</span>
+                                    </router-link>
+                                </li>
+                                <li>
                                     <router-link to="/request" class="text-white">
                                         <span class="title">Организовать мероприятие</span>
                                     </router-link>

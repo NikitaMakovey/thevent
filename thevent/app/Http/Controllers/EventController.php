@@ -18,10 +18,10 @@ class EventController extends Controller
         $events = DB::table('events')
             ->join('topics', 'events.topic_id', '=', 'topics.id')
             ->where('events.status', '=', true)
-            ->where('events.event_date', '>', date('Y-m-d'))
+            ->where('events.event_date', '>=', date('Y-m-d'))
             ->orderBy('events.event_date')
             ->select('events.*', 'topics.name')
-            ->paginate(3);
+            ->paginate(6);
 
         return response($events, 200);
     }
@@ -38,10 +38,10 @@ class EventController extends Controller
             ->join('topics', 'events.topic_id', '=', 'topics.id')
             ->where('events.status', '=', true)
             ->where('events.topic_id', '=', $id)
-            ->where('events.event_date', '>', date('Y-m-d'))
+            ->where('events.event_date', '>=', date('Y-m-d'))
             ->orderBy('events.event_date')
             ->select('events.*', 'topics.name')
-            ->paginate(3);
+            ->paginate(6);
 
         return response($events, 200);
     }
