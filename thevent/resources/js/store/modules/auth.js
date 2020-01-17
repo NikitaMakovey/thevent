@@ -2,6 +2,7 @@ import axios from 'axios';
 
 export default {
     state: {
+        DASHBOARD_ACCESS: localStorage.getItem('DASHBOARD_ACCESS') || null,
         ACCESS_TOKEN: localStorage.getItem('ACCESS_TOKEN') || null,
         TOKEN_TYPE: localStorage.getItem('TOKEN_TYPE') || null,
         ID: localStorage.getItem('ID') || null,
@@ -20,6 +21,7 @@ export default {
     },
     getters: {
         ACCESS_TOKEN: state => { return state.ACCESS_TOKEN },
+        DASHBOARD_ACCESS: state => { return state.DASHBOARD_ACCESS },
         TOKEN_TYPE: state => { return state.TOKEN_TYPE },
         ID: state => { return state.ID },
         FIRST_NAME: state => { return state.FIRST_NAME },
@@ -37,6 +39,7 @@ export default {
     },
     mutations: {
         SET_USER: (state, data) => {
+            localStorage.setItem('DASHBOARD_ACCESS', data.dashboard_access);
             localStorage.setItem('ACCESS_TOKEN', data.access_token);
             localStorage.setItem('TOKEN_TYPE', data.token_type);
             localStorage.setItem('ID', data.user.id);
@@ -51,6 +54,7 @@ export default {
             localStorage.setItem('BIRTH_DATE', data.user.birth_date);
             localStorage.setItem('SPECIALIZATION', data.user.specialization);
             localStorage.setItem('INFO', data.user.info);
+            state.DASHBOARD_ACCESS = data.dashboard_access;
             state.ACCESS_TOKEN = data.access_token;
             state.TOKEN_TYPE = data.token_type;
             state.ID = data.user.id;
@@ -67,6 +71,7 @@ export default {
             state.INFO = data.user.info;
         },
         UNSET_USER: (state) => {
+            localStorage.removeItem('DASHBOARD_ACCESS');
             localStorage.removeItem('ACCESS_TOKEN');
             localStorage.removeItem('TOKEN_TYPE');
             localStorage.removeItem('ID');
@@ -81,6 +86,7 @@ export default {
             localStorage.removeItem('BIRTH_DATE');
             localStorage.removeItem('SPECIALIZATION');
             localStorage.removeItem('INFO');
+            state.DASHBOARD_ACCESS = null;
             state.ACCESS_TOKEN = null;
             state.TOKEN_TYPE = null;
             state.ID = null;
@@ -138,10 +144,12 @@ export default {
         LOGIN_USER(context, payload) {
             return new Promise((resolve, reject) => {
                 if (payload.access_token) {
+                    const dashboard_access = payload.dashboard_access;
                     const access_token = payload.access_token;
                     const token_type = payload.token_type;
                     const user = payload.user;
                     const data = {
+                        dashboard_access: dashboard_access,
                         access_token: access_token,
                         token_type: token_type,
                         user: user

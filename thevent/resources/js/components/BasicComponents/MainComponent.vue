@@ -38,6 +38,13 @@
                                         <span class="title">Организовать мероприятие</span>
                                     </router-link>
                                 </li>
+                                <template v-if="DASHBOARD_ACCESS == 1">
+                                    <li>
+                                        <router-link to="/dashboard" class="text-white">
+                                            <span class="title">Приборная панель</span>
+                                        </router-link>
+                                    </li>
+                                </template>
                                 <li>
                                     <v-btn dark class="text-white pa-0 ma-0" @click="logout">
                                         <span class="title">Выйти</span>
@@ -90,7 +97,8 @@
             }
         },
         computed: {
-            ACCESS_TOKEN() { return this.$store.getters.ACCESS_TOKEN }
+            ACCESS_TOKEN() { return this.$store.getters.ACCESS_TOKEN },
+            DASHBOARD_ACCESS() { return this.$store.getters.DASHBOARD_ACCESS }
         }
     }
 </script>

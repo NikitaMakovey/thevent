@@ -39,6 +39,34 @@ Route::group(['prefix' => 'auth'], function () {
             Route::post('skills', 'RequestController@storeEventSkills');
             Route::post('comment', 'RequestController@storeComment');
         });
+
+        Route::get('roles', 'DashboardController@getRoles');
+
+        Route::group(['prefix' => 'dashboard'], function () {
+            Route::get('main-moderator/requests', 'DashboardController@getMainModeratorRequests');
+            Route::get('main-moderator/requests/{request}', 'DashboardController@getMainModeratorRequest');
+            Route::post('main-moderator/requests/{request}', 'DashboardController@updateMainModeratorRequest');
+            Route::delete('main-moderator/requests/{request}', 'DashboardController@deleteMainModeratorRequest');
+
+            Route::get('event-moderator/events', 'DashboardController@getEventModeratorRequests');
+            Route::get('event-moderator/events/{event}', 'DashboardController@getEventModeratorRequest');
+            Route::post('event-moderator/events/{event}/update', 'DashboardController@updateEventModeratorRequest');
+            Route::post('event-moderator/events/{event}/delete', 'DashboardController@deleteEventModeratorRequest');
+
+            Route::get('volunteer/events', 'DashboardController@getVolunteerRequests');
+            Route::get('volunteer/events/{event}', 'DashboardController@getVolunteerRequest');
+            Route::post('volunteer/events/{event}/update', 'DashboardController@updateVolunteerRequest');
+            Route::post('volunteer/events/{event}/update-all', 'DashboardController@updateVolunteerFullRequest');
+
+            Route::get('organizer/events', 'DashboardController@getOrganizerRequests');
+            Route::get('organizer/events/{event}', 'DashboardController@getOrganizerRequest');
+
+            Route::get('speaker/events', 'DashboardController@getSpeakerRequests');
+
+            Route::get('admin/main-moderators', 'DashboardController@getAdminRequests');
+            Route::delete('admin/main-moderators/{main-moderator}', 'DashboardController@deleteMainModerator');
+            Route::post('admin/main-moderators', 'DashboardController@setMainModerator');
+        });
     });
 });
 

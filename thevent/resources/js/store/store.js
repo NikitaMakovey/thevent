@@ -6,6 +6,7 @@ import user from './modules/user';
 import verify from "./modules/verify";
 import topic from "./modules/topic";
 import request from "./modules/request";
+import dashboard from "./modules/dashboard";
 
 Vue.use(Vuex);
 
@@ -20,6 +21,7 @@ export const store = new Vuex.Store({
         user,
         verify,
         topic,
-        request
+        request,
+        dashboard
     }
 });

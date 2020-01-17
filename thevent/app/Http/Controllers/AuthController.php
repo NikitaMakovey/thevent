@@ -6,6 +6,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -97,7 +98,17 @@ class AuthController extends Controller
 
                 $token->save();
 
+                $roles = DB::table('user_role')
+                    ->join('roles', 'user_role.role_id', '=', 'roles.id')
+                    ->where('user_role.user_id', '=', $user->id)
+                    ->where('roles.name', '!=', 'Участник')
+                    ->orderBy('roles.id')
+                    ->select('roles.id', 'roles.name')
+                    ->get();
+                $dashboard_access = count($roles) == 0 ? 0 : 1;
+
                 return response([
+                    'dashboard_access' => $dashboard_access,
                     'access_token' => $tokenResult->accessToken,
                     'token_type' => 'Bearer',
                     'expires_at' => Carbon::parse(

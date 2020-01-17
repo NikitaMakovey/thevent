@@ -15,7 +15,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        $events = DB::table('events')
+            ->where('status', '=', true)
+            ->where('event_date', '>', date('Y-m-d'))
+            ->orderBy('updated_at')
+            ->get();
 
         return response($events, 200);
     }

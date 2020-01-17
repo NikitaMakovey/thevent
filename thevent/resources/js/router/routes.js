@@ -40,6 +40,14 @@ import RegisterComponent from "../components/AuthComponents/RegisterComponent";
 import auth from "./middleware/auth";
 import guest from "./middleware/guest";
 import profile from "./middleware/profile";
+import MMRequest from "../components/DashboardComponents/RoleComponents/ChildComponents/MMRequest";
+import EMRequest from "../components/DashboardComponents/RoleComponents/ChildComponents/EMRequest";
+import VRequest from "../components/DashboardComponents/RoleComponents/ChildComponents/VRequest";
+import OContainerRequest from "../components/DashboardComponents/RoleComponents/ChildComponents/OContainerRequest";
+import ORRequest from "../components/DashboardComponents/RoleComponents/ChildComponents/ORRequest";
+import OURequest from "../components/DashboardComponents/RoleComponents/ChildComponents/OURequest";
+import ARRequest from "../components/DashboardComponents/RoleComponents/ChildComponents/ARRequest";
+import AURequest from "../components/DashboardComponents/RoleComponents/ChildComponents/AURequest";
 
 const routes = [
     {
@@ -167,34 +175,83 @@ const routes = [
         children: [
             {
                 path: 'admin',
-                name: 'dashboard.admin',
-                component: AdminComponent
+                component: AdminComponent,
+                children: [
+                    {
+                        path: 'requests',
+                        name: 'a-request-r',
+                        component: ARRequest
+                    },
+                    {
+                        path: 'members',
+                        name: 'Администратор',
+                        component: AURequest,
+                    }
+                ]
             },
+
             {
                 path: 'event-moderator',
-                name: 'dashboard.event-moderator',
+                name: 'Модератор мероприятий',
                 component: EventModeratorComponent
             },
             {
+                path: 'event-moderator/events/:id',
+                name: 'em-request',
+                component: EMRequest
+            },
+
+            {
                 path: 'main-moderator',
-                name: 'dashboard.main-moderator',
+                name: 'Главный модератор',
                 component: MainModeratorComponent
             },
             {
+                path: 'main-moderator/requests/:id',
+                name: 'mm-request',
+                component: MMRequest
+            },
+
+            {
                 path: 'organizer',
-                name: 'dashboard.organizer',
+                name: 'Организатор',
                 component: OrganizerComponent
             },
             {
+                path: 'organizer/events/:id',
+                name: 'o-request',
+                component: OContainerRequest,
+                children: [
+                    {
+                        path: 'requests',
+                        name: 'o-request-r',
+                        component: ORRequest
+                    },
+                    {
+                        path: 'members',
+                        name: 'o-request-m',
+                        component: OURequest,
+                    }
+                ]
+
+            },
+
+            {
                 path: 'speaker',
-                name: 'dashboard.speaker',
+                name: 'Спикер',
                 component: SpeakerComponent
             },
+
             {
                 path: 'volunteer',
-                name: 'dashboard.volunteer',
+                name: 'Волонтёр',
                 component: VolunteerComponent
-            }
+            },
+            {
+                path: 'volunteer/events/:id',
+                name: 'v-request',
+                component: VRequest
+            },
         ]
     }
 ];

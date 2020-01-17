@@ -18,7 +18,7 @@
                     cols="12"
                 >
                     <v-row>
-                        <v-col cols="12" sm="4" md="4" class="pa-12 divider-right">
+                        <v-col cols="12" sm="4" md="4" class="pa-1 divider-right">
                             <v-list rounded>
                                 <v-list-item-group v-model="item" color="primary">
                                     <v-list-item
@@ -37,7 +37,7 @@
                                 </v-list-item-group>
                             </v-list>
                         </v-col>
-                        <v-col cols="12" sm="8" md="8" class="pa-12">
+                        <v-col cols="12" sm="8" md="8" class="pa-2">
                             <router-view></router-view>
                         </v-col>
                     </v-row>
