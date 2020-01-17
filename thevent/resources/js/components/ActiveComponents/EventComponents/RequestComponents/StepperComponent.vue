@@ -372,9 +372,12 @@
                 this.formEventSkills.event_id = this.$store.getters.REQUEST_ID;
                 this.formEventSkills.skills = skills;
                 if (
-                    (skills[0].skill_id !== 0 && skills[0].skill_factor !== 0) ||
+                    ((skills[0].skill_id !== 0 && skills[0].skill_factor !== 0) ||
                     (skills[1].skill_id !== 0 && skills[1].skill_factor !== 0) ||
-                    (skills[2].skill_id !== 0 && skills[2].skill_factor !== 0)
+                    (skills[2].skill_id !== 0 && skills[2].skill_factor !== 0)) &&
+                    ((skills[0].skill_id !== skills[1].skill_id) &&
+                    (skills[1].skill_id !== skills[2].skill_id) &&
+                    (skills[2].skill_id !== skills[0].skill_id))
                 ) {
                     this.formEventSkills.post('/api/auth/request/skills', config)
                         .then(() => {

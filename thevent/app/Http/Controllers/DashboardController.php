@@ -515,8 +515,8 @@ class DashboardController extends Controller
             ->select('user_id')
             ->get();
 
-        foreach ($requests as $request) {
-            $this->postUserSkills($request->user_id, $id);
+        foreach ($requests as $r) {
+            $this->postUserSkills($r->user_id, $id);
         }
 
         DB::table('characters')

@@ -57,7 +57,7 @@
                 class="my-2 px-2"
             >
                 <v-row class="pa-4">
-                    <v-col cols="12" sm="8" md="8" class="pa-12 divider-right">
+                    <v-col cols="12" sm="8" md="8" class="pa-2 divider-right">
                         <div class="px-2">
                             <div class="content-container">
                                 <p class="event-text">{{ EVENT.short_description }}</p>
@@ -70,7 +70,7 @@
                             </div>
                         </div>
                     </v-col>
-                    <v-col cols="12" sm="4" md="4" class="pa-12">
+                    <v-col cols="12" sm="4" md="4" class="pa-2">
                         <div class="px-2">
                             <div class="content-container">
                                 <p class="info-text">
