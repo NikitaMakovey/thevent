@@ -4,10 +4,9 @@
             <div class="container">
                 <h1 class="jumbotron-heading">Наша платформа - ваше развитие</h1>
                 <p class="lead text-muted">
-                    The comrade sings riddle like a rough seashell.
-                    Urchin is a rainy comrade.
-                    Gar, never lead a fish.
-                    Misty, warm suns quietly love a weird, addled lad.
+                    Принимай участие в мероприятиях и становись лучше!
+                    Хочешь стать не просто участником? Присылай нам заявку, и мы её рассмотрим!
+                    С нами ты можешь стать кем угодно - всё зависит от тебя.
                 </p>
             </div>
         </section>

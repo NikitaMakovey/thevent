@@ -2,7 +2,7 @@
     <div class="album py-5 bg-light">
         <div class="container">
             <div>
-                <p class="display-4">Пользователи</p>
+                <p class="display-1">Пользователи</p>
             </div>
             <v-divider></v-divider>
             <div class="row">

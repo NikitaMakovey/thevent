@@ -383,12 +383,12 @@
             border-radius: 0.5rem;
         }
     }
-    @media screen and (min-width: 2000px) {
+    @media screen and (min-width: 1800px) {
         .event-text {
-            font-size: 2.5rem;
+            font-size: 2rem;
         }
         .info-text {
-            font-size: 2.4rem !important;
+            font-size: 1.5rem !important;
         }
         .image-container img {
             height: 30rem;
@@ -409,7 +409,7 @@
         font-size: 2rem;
     }
     .td-text {
-        font-size: 1rem;
+        font-size: 1.4rem;
     }
     @media screen and (min-width: 1800px) {
         .chip-container {

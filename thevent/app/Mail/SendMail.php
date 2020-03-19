@@ -34,7 +34,7 @@ class SendMail extends Mailable
     public function build()
     {
         return $this
-            ->from('niks.finn@gmail.com')
+            ->from('thevent.tech@gmail.com')
             ->subject('Подтверждение Email на ThEvent')
             ->view('send_email_template')
             ->text('send_mail')

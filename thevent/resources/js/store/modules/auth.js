@@ -105,6 +105,7 @@ export default {
         UPDATE_INFO: (state, data) => {
             localStorage.setItem('FIRST_NAME', data.first_name);
             localStorage.setItem('SECOND_NAME', data.second_name);
+            localStorage.setItem('THIRD_NAME', data.third_name);
             localStorage.setItem('SEX', data.sex);
             localStorage.setItem('BIRTH_DATE', data.birth_date);
             state.FIRST_NAME = data.first_name;
